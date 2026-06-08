@@ -1,11 +1,26 @@
 apiVersion: skaffold/v4beta7
 kind: Config
-
-build:
-  artifacts:
-    - image: asia-south1-docker.pkg.dev/muthukkumar/finova-repo/app
-
+metadata:
+  name: finova-bank-app-dev
 manifests:
   kustomize:
     paths:
       - k8s/overlays/dev
+---
+apiVersion: skaffold/v4beta7
+kind: Config
+metadata:
+  name: finova-bank-app-stage
+manifests:
+  kustomize:
+    paths:
+      - k8s/overlays/stage
+---
+apiVersion: skaffold/v4beta7
+kind: Config
+metadata:
+  name: finova-bank-app-prod
+manifests:
+  kustomize:
+    paths:
+      - k8s/overlays/prod
