@@ -20,7 +20,7 @@ spec:
       containers:
       - name: payments
 
-        image: IMAGE_PLACEHOLDER
+        image: asia-south1-docker.pkg.dev/muthukkumar/finova-repo/app:latest
 
         ports:
         - containerPort: 8080
