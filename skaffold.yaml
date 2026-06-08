@@ -1,6 +1,10 @@
 apiVersion: skaffold/v4beta7
 kind: Config
 
+build:
+  artifacts:
+    - image: asia-south1-docker.pkg.dev/muthukkumar/finova-repo/app
+
 manifests:
   kustomize:
     paths:
