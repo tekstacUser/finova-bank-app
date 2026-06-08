@@ -26,8 +26,6 @@ apiVersion: deploy.cloud.google.com/v1
 kind: Target
 metadata:
   name: prod-target
-executionConfigs:
-- usages: [RENDER, DEPLOY]
-  requireApproval: true
+requireApproval: true # <-- MOVED HERE: This is the correct structural location!
 gke:
   cluster: projects/muthukkumar/locations/asia-south1/clusters/finova-cluster
