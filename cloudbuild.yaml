@@ -1,26 +1,33 @@
-steps:
-
-- name: maven:3.9-eclipse-temurin-21
-  entrypoint: mvn
-  args:
-    - clean
-    - test
-    - package
-
-- name: gcr.io/cloud-builders/docker
-  args:
-    - build
-    - -t
-    - asia-south1-docker.pkg.dev/$PROJECT_ID/finova-repo/app:$COMMIT_SHA
-    - .
-
-- name: gcr.io/cloud-builders/docker
-  args:
-    - push
-    - asia-south1-docker.pkg.dev/$PROJECT_ID/finova-repo/app:$COMMIT_SHA
-
-images:
-- asia-south1-docker.pkg.dev/$PROJECT_ID/finova-repo/app:$COMMIT_SHA
-
-options:
-  logging: CLOUD_LOGGING_ONLY
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: finova-pipeline
+serialPipeline:
+  stages:
+  - targetId: dev-target
+  - targetId: stage-target
+  - targetId: prod-target
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: dev-target
+gke:
+  cluster: projects/muthukkumar/locations/asia-south1/clusters/finova-cluster
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: stage-target
+gke:
+  cluster: projects/muthukkumar/locations/asia-south1/clusters/finova-cluster
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod-target
+executionConfigs:
+- usages: [RENDER, DEPLOY]
+  requireApproval: true # Enforces Phase 18 Approval Gate
+gke:
+  cluster: projects/muthukkumar/locations/asia-south1/clusters/finova-cluster
