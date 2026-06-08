@@ -1,6 +1,11 @@
 resources:
-- ../../base
+  - ../../base
 
-replicas:
-- name: payments-service
-  count: 1
+patches:
+  - target:
+      kind: Deployment
+      name: payments-service
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
