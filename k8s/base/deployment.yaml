@@ -1,43 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
-
 metadata:
   name: payments-service
-
 spec:
   replicas: 1
-
   selector:
     matchLabels:
       app: payments
-
   template:
     metadata:
       labels:
         app: payments
-
     spec:
       containers:
       - name: payments
         image: asia-south1-docker.pkg.dev/muthukkumar/finova-repo/app
         ports:
         - containerPort: 8080
-
         resources:
           requests:
-            cpu: "100m"
-            memory: "128Mi"
-
+            cpu: "500m"     # Accelerated processing power for Java Spring context initialization
+            memory: "256Mi" 
           limits:
-            cpu: "200m"
-            memory: "256Mi"
-
+            cpu: "1000m"
+            memory: "512Mi"
         readinessProbe:
           httpGet:
             path: /
             port: 8080
-
+          initialDelaySeconds: 60 # Allows Tomcat 40 seconds to fully bind and start up
+          periodSeconds: 10
         livenessProbe:
           httpGet:
             path: /
             port: 8080
+          initialDelaySeconds: 60 # Allows the JVM environment to stabilize before liveness policing kicks in
+          periodSeconds: 10
