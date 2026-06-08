@@ -1,0 +1,23 @@
+steps:
+
+- name: maven:3.9-eclipse-temurin-21
+  entrypoint: mvn
+  args:
+    - clean
+    - test
+    - package
+
+- name: gcr.io/cloud-builders/docker
+  args:
+    - build
+    - -t
+    - asia-south1-docker.pkg.dev/$PROJECT_ID/finova-repo/app:$COMMIT_SHA
+    - .
+
+- name: gcr.io/cloud-builders/docker
+  args:
+    - push
+    - asia-south1-docker.pkg.dev/$PROJECT_ID/finova-repo/app:$COMMIT_SHA
+
+images:
+- asia-south1-docker.pkg.dev/$PROJECT_ID/finova-repo/app:$COMMIT_SHA
