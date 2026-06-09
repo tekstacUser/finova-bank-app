@@ -1,26 +1,30 @@
 apiVersion: skaffold/v4beta7
 kind: Config
 metadata:
-  name: finova-bank-app-dev
+  name: finova-bank-app
+
+# 1. This is your default base configuration (usually points to dev)
 manifests:
   kustomize:
     paths:
       - k8s/overlays/dev
----
-apiVersion: skaffold/v4beta7
-kind: Config
-metadata:
-  name: finova-bank-app-stage
-manifests:
-  kustomize:
-    paths:
-      - k8s/overlays/stage
----
-apiVersion: skaffold/v4beta7
-kind: Config
-metadata:
-  name: finova-bank-app-prod
-manifests:
-  kustomize:
-    paths:
-      - k8s/overlays/prod
+
+# 2. This defines the environment profiles Cloud Deploy is searching for
+profiles:
+  - name: dev-target
+    manifests:
+      kustomize:
+        paths:
+          - k8s/overlays/dev
+
+  - name: stage-target
+    manifests:
+      kustomize:
+        paths:
+          - k8s/overlays/stage
+
+  - name: prod-target
+    manifests:
+      kustomize:
+        paths:
+          - k8s/overlays/prod
